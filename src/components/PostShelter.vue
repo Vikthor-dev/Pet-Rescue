@@ -2,7 +2,7 @@
         <div class="card mb-3">
         <div class="header header-dark bg-dark">
         <img :src="info.userPic" align="left" alt="...">
-        <p>{{info.postedBy}}</p>
+        <p>{{info.username}}</p>
         </div>
       <img id="posted-img" :src="info.url" class="card-img-top" alt="...">
       <div v-if="info.name && info.gender && info.age!=NULL" class="pet-info pet-info-dark bg-dark">
@@ -17,11 +17,11 @@
       </div>
       <div class="footer footer-dark bg-dark">
         <div class="row">
-        <div class="col-5">
+        <div id="lokacijaDiv" class="col-5">
         <img src="/Location.png" align="left" alt="...">
-        <p id="locationText" align="left"><small>Location:{{info.location}}</small></p>
+        <p id="locationText" align="left"><small>{{info.location}}</small></p>
         </div>
-        <div @click="gotoDetails(post)" class="col-4">
+        <div id="komentariDiv" @click="gotoDetails(post)" class="col-4">
         <img id="commentsImg" src="/Comment.png" align="left" alt="...">
         <p id="commentsText" align="left"><small>Comments</small></p>
         </div>
@@ -39,7 +39,7 @@
         <input  v-model="newComment" type="text" class="form-control" placeholder="Comment this post" id="commentsInput">
         </div>
         <div class="col-sm col-md">
-        <button id="inputCommentsBtn" type="submit" class="btn btn-success btn-md">Post</button>
+        <button v-if="this.global.userName!=''" id="inputCommentsBtn" type="submit" class="btn btn-success btn-md">Post</button>
         </div>
         </div>
         </div>
@@ -49,7 +49,7 @@
         <img id="commImg" :src="c.ImgComm" alt="">
         <small id="postedComment">{{ c.comment }}</small>
         <small id="commBy"> by </small>
-        <small id="commPostedBy">{{ c.Posted_By }} </small>
+        <small id="commPostedBy">{{ c.User_name }} </small>
         <small id="commTime">{{ c.Posted_at}}</small>
         </a>
         </div>
@@ -120,7 +120,8 @@ export default {
                Posted_By: this.global.userEmail, 
                comment: this.newComment, 
                Posted_at: k,
-               ImgComm:this.global.userPicture
+               ImgComm:this.global.userPicture,
+               User_name:this.global.userName
                 })
               .then(result => {
                 console.log(result)
@@ -352,6 +353,12 @@ export default {
   font-weight: bold;
   font-style: italic;
 }
+#komentariDiv{
+  transform: translateX(30px);
+}
+#lokacijaDiv{
+  transform: translateX(10px);
+}
 @media only screen and (max-width: 620px) {
   .pet-info{
     #name{
@@ -384,7 +391,7 @@ export default {
     font-weight: bold;
   }
   #locationText{
-    display: none;
+    font-size: 13px;
   }
   #commentsText{
     display:none;
@@ -419,6 +426,14 @@ export default {
   }
   #editPostRouterLink{
     color: whitesmoke;
+  }
+  #commentsInput{
+    width: 175px;
+  }
+  #inputCommentsBtn{
+    height: 35px;
+    width: 60px;
+    transform: translate(95px,-45px);
   }
 } 
 </style>

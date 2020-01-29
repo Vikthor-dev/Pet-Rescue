@@ -69,9 +69,6 @@ h1{
   .right-col{
     display:none;
   }
-  #DeleteAcch1{
-    display: none;
-  }
   #deleteAccLabel{
     font-size: 25px;
     transform: translateX(-5px);

@@ -30,6 +30,10 @@
         <input disabled type="text" class="form-control" :value="userSecondName">
       </div>
 
+      <div class="form-group">
+        <input disabled type="text" class="form-control" :value="userName">
+      </div>
+
        <div v-if="this.userType=='shelter'" class="form-group">
         <input disabled type="text" class="form-control" :value="userShelterName">
       </div>
@@ -133,13 +137,23 @@ h3{
   }
   h1{
     color: whitesmoke;
+    margin-top: 100px;
     margin-bottom: 30px;
-    transform: translateX(-120px);
-    font-size: 30px;
+    transform: translateX(60px);
+    font-size: 50px;
 }
 h3{
     color: whitesmoke;
     font-size: 20px;
+}
+.form-group{
+  transform: translateX(40px);
+  input{
+    width: 250px;
+  }
+}
+#eidtProfileBtn{
+  transform: translateX(0px);
 }
 }
 </style>

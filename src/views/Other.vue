@@ -22,12 +22,11 @@ import PostShelter from '@/components/PostShelter.vue';
       PostShelter
       },
       computed:{
-      
       filteredPosts () {
       return this.posts.filter(post => post.postedBy.toLowerCase().includes(this.search) || post.description.toLowerCase().includes(this.search))
     },
       filteredPostShelter () {
-      return this.posts.filter(post => post.postedBy.toLowerCase().includes(this.search) && post.animal=='Other' || post.description.toLowerCase().includes(this.search) && post.animal=='Other')
+      return this.posts.filter(post => post.username.toLowerCase().includes(this.search) && post.animal=='Other' || post.description.toLowerCase().includes(this.search) && post.animal=='Other' || post.location.toLowerCase().includes(this.search) && post.animal=='Other')
     },
       convertTimestamp() {
         var d = new Date(this.userDbf.seconds * 1000), // Convert the passed timestamp to milliseconds
@@ -89,6 +88,13 @@ import PostShelter from '@/components/PostShelter.vue';
 </script>
 
 <style lang="scss">
+ #saveAnimals{
+   width: 500px;
+   transition: transform 0.5s;
+ }
+ #saveAnimals:hover{
+   transform: rotateY(30deg);
+ }
 .header{
   height: 60px;
   border-style: solid;

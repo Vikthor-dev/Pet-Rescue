@@ -15,14 +15,14 @@ export default {
     return store;
   },
   mounted(){
-    
+
   },
   computed: {
       filteredPosts () {
-      return this.posts.filter(post => post.postedBy.toLowerCase().includes(this.search) || post.description.toLowerCase().includes(this.search))
+      return this.posts.filter(post => post.postedBy.toLowerCase().includes(this.search) || post.description.toLowerCase().includes(this.search) || post.location.toLowerCase().includes(this.search))
     },
       filteredPostShelter () {
-      return this.posts.filter(post => post.postedBy.toLowerCase().includes(this.search) || post.description.toLowerCase().includes(this.search))
+      return this.posts.filter(post => post.username.toLowerCase().includes(this.search) || post.description.toLowerCase().includes(this.search) || post.location.toLowerCase().includes(this.search))
     },
     convertTimestamp() {
         var d = new Date(this.userDbf.seconds * 1000), // Convert the passed timestamp to milliseconds

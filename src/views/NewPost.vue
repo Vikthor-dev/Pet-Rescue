@@ -3,19 +3,18 @@
   <div class="row">
 
 
-    <div class="col-xs col-md">
-     
-    </div>
-
-
-    <div class="col-xs-7 col-md-7">
-
-      <div class="form-group">
-      <form @submit.prevent="postImage">
-          <div class="form-group">
+    <div class="col-xs col-md-4">
+              <div class="form-group">
             <croppa :width="350" :height="350" v-model="postImageData"></croppa>
         <!--  <input v-model="postImageUrl" type="text" id="imageUrl" class="form-control" placeholder="Paste the image URL"/> -->
           </div>
+    </div>
+
+
+    <div id="midCol" class="col-xs-7 col-md-4">
+
+      <div class="form-group">
+         <form @submit.prevent="postImage">
 
           
           <div class="form-group">
@@ -25,48 +24,19 @@
 
           <div class="form-group">
           <label id="animalLabel"><strong>Animal:</strong></label>
-          <select required id="animalType" class="form-control" v-model="animal">
+          <select required id="animalTypeX" class="form-control" v-model="animal">
           <option :key="animal" v-for="animal in animals">{{animal}}</option>
-          </select>
-          </div>
-
-          <div v-if="this.userType=='shelter'" class="form-group">
-          <label id="animalName"><strong>Name:</strong></label>
-          <input required v-model="name" type="text" id="petname" class="form-control" placeholder="Animal's name"/>
-          </div>
-
-
-          <div v-if="this.userType=='shelter'" class="form-group">
-          <label id="animalGenderLabel"><strong>Gender:</strong></label>
-          <select required id="animalType" class="form-control" v-model="gender">
-          <option :key="gender" v-for="gender in genders">{{gender}}</option>
-          </select>
-          </div>
-
-          
-          <div v-if="this.userType=='shelter'" class="form-group">
-          <label id="animalAge"><strong>Age:</strong></label>
-          <select required id="animalType" class="form-control" v-model="age">
-          <option :key="age" v-for="age in ages">{{age}}</option>
           </select>
           </div>
 
 
           <div class="form-group">
           <label id="animalLocation"><strong>Location:</strong></label>
-          <input required v-model="location" maxlength="14" type="text" id="LocationInput" class="form-control" placeholder="City,Country"/>
+          <input required v-model="location" type="text" id="LocationInput" class="form-control" placeholder="City or Street"/>
           </div>
 
+          <button v-if="this.userType=='person' && this.userName!=''" type="submit" id="postBtnPerson" class="btn btn-lg btn-primary mb-5"><strong>Post</strong></button>
 
-          <div v-if="this.userType=='shelter'" class="form-group">
-          <label id="shelterLink"><strong>Shelter's Page :</strong></label>
-          <input required v-model="link" type="text" id="LinkUrl" class="form-control" placeholder="https://www.bluecross.org.uk/victoria-animal-hospital"/>
-          </div>
-
-
-
-
-          <button type="submit" id="postBtn" class="btn btn-primary mb-5"><strong>Post</strong></button>
         </form>
       </div>
 
@@ -74,10 +44,43 @@
 
 
 
-    <div class="col-xs col-md">
-      
-    </div>
+    <div class="col-xs col-md-4">
 
+          <form @submit.prevent="postImage">
+      
+          <div v-if="this.userType=='shelter'" class="form-group">
+          <label id="animalName"><strong>Name:</strong></label>
+          <input :disabled="isDisabled" required v-model="name" type="text" id="petname" class="form-control" placeholder="Animal's name"/>
+          </div>
+
+
+          <div v-if="this.userType=='shelter'" class="form-group">
+          <label id="animalGenderLabel" style="color:whitesmoke"><strong>Gender:</strong></label>
+          <select :disabled="isDisabled" required id="animalType" class="form-control" v-model="gender">
+          <option :key="gender" v-for="gender in genders">{{gender}}</option>
+          </select>
+          </div>
+
+          
+          <div v-if="this.userType=='shelter'" class="form-group">
+          <label id="animalAge"><strong>Age:</strong></label>
+          <select :disabled="isDisabled" required id="animalType" class="form-control" v-model="age">
+          <option :key="age" v-for="age in ages">{{age}}</option>
+          </select>
+          </div>
+
+
+          <div v-if="this.userType=='shelter'" class="form-group">
+          <label id="shelterLink"><strong>Shelter's Page :</strong></label>
+          <input :disabled="isDisabled" required v-model="link" type="text" id="LinkUrl" class="form-control" placeholder="https://www.bluecross.org.uk/victoria-animal-hospital"/>
+          </div>
+
+          <button v-if="this.userType=='shelter' && this.userName!=''" type="submit" id="postBtn" class="btn btn-lg btn-primary mb-5"><strong>Post</strong></button>
+          <button v-if="this.userType=='shelter'" type="button" v-on:click="isDisabled = !isDisabled" id="postBtn2" class="btn btn-lg btn-primary mb-5"><strong>Regular Post</strong></button>
+
+          </form>
+    </div>
+  
 
   </div>
 </div>
@@ -147,7 +150,8 @@ export default {
           gender:self.gender,
           age:self.age,
           location:self.location,
-          link:self.link
+          link:self.link,
+          username:self.userName
         })
         .then(function(docRef) {
           console.log("Document written with ID: ", docRef.id);
@@ -175,11 +179,17 @@ export default {
     this.$router.push({ name: "posts" }).catch(err => console.log(err));
     }  
 
-  } 
+  }
 }
 </script>
 
 <style scoped lang="scss">
+  input[type=text]:disabled {
+  background: #127be4
+}
+  select:disabled {
+  background: #127be4
+}
   textarea:hover{
     background-color:gainsboro;
   }
@@ -190,8 +200,9 @@ export default {
     background-color:gainsboro;
   }
   #description{
-    transform: translateX(-15px);
-    width: 650px;
+    margin-top:30px;
+    transform: translateX(45px);
+    width: 355px;
   }
   #imageUrl{
     width: 650px;
@@ -199,100 +210,87 @@ export default {
   }
   #petname{
     width: 250px;
-    transform: translateX(-15px);
+    transform: translateX(105px);
   }
   #LinkUrl{
-    width: 650px;
-    transform: translateX(-15px);
+    width: 250px;
+    transform: translateX(105px);
   }
    #LocationInput{
     width: 250px;
-    transform: translateX(-15px);
+    transform: translateX(45px);
     }
   #postBtn{
-    transform: translateX(-295px);
+    transform: translateX(-375px);
+  }
+  #postBtn2{
+    transform: translateX(-335px);
+  }
+  #postBtnPerson{
+    margin-top: 30px;
+    transform: translateX(-85px);
   }
   #animalLabel{
-    transform: translateX(-290px);
+    transform: translateX(-95px);
     color: whitesmoke;
   }
   #animalName{
-    transform: translateX(-295px);
+    transform: translateX(-40px);
     color: whitesmoke;
   }
   #animalGenderLabel{
-    transform: translateX(-290px);
+    transform: translateX(-30px);
   }
   #animalAge{
-    transform: translateX(-300px);
+    transform: translateX(-40px);
     color: whitesmoke;
   }
   #animalLocation{
-    transform: translateX(-285px);
+    transform: translateX(-85px);
     color: whitesmoke;
   }
   #shelterLink{
-    transform: translateX(-260px);
+    transform: translateX(-5px);
     color: whitesmoke;
   }
   #animalType{
-    transform: translateX(-15px);
+    transform: translateX(105px);
     width:100px;
   }
-  #alertmessage1{
-    transform: translateY(35px);
-    margin-right: 140px;
-    color:powderblue;
-    font-weight: bold;
-  }
-  #alertmessage2{
-    transform: translateY(35px);
-    margin-left: 140px;
-    color:powderblue;
-    font-weight: bold;
-  }
-   #alertmessage3{
-    transform: translateY(35px);
-    color:powderblue;
-    font-weight: bold;
+  #animalTypeX{
+    transform: translateX(45px);
+    width:100px;
   }
   .croppa-container{
-    transform: translateX(-145px);
+    margin-top: 30px;
+    transform: translateX(-55px);
+    margin-bottom: 50px;
   }
    @media only screen and (max-width: 620px) {
-            #leftcol{
-                display: none;
-            }
-            #rightcol{
-                display: none;
-            }
             #newPostContainer{
               transform: translateY(-30px)
-            }
-            #alertmessage1{
-              display:none;
-            }
-             #alertmessage2{
-              display: none;
-            }
-             #alertmessage3{
-              display: none;
             }
             #imageUrl{
               width: 250px;
               margin-bottom:30px;
               margin-top: 30px;
             }
+            #animalTypeX{
+              transform: translate(-20px,-80px);
+            }
              #description{
-              transform: translateX(-15px);
-              width: 320px;
+              transform: translate(-20px,-80px);
+              width: 300px;
             }
              #animalLabel{
-              transform: translateX(-115px);
+              transform: translate(-120px,-80px);
               color: whitesmoke;
             }
+            #petname{
+              transform: translateX(-20px);
+            }
             #animalName{
-              transform: translateX(-120px);
+              transform: translateX(-125px);
               color: whitesmoke;
             }
             #animalGenderLabel{
@@ -303,7 +301,7 @@ export default {
               color: whitesmoke;
             }
             #animalLocation{
-              transform: translateX(-105px);
+              transform: translate(-115px,-70px);
               color: whitesmoke;
             }
             #shelterLink{
@@ -312,7 +310,7 @@ export default {
             }
             #LocationInput{
               width: 250px;
-              transform: translateX(-15px);
+              transform: translate(-20px,-70px);
             }
             #LinkUrl{
               width: 250px;
@@ -323,11 +321,25 @@ export default {
               transform: translateX(-15px);
               width: 100%;
             }
+            #animalType{
+              transform: translateX(-20px);
+            }
+            #shelterLink{
+              transform: translateX(-85px);
+            }
+            #postBtn2{
+              transform: translateX(-15px);
+              width: 100%;
+            }
             .croppa-container{
               width: 350px;
               height: 350px;
-              transform: translateX(-20px);
+              transform: translate(-25px);
               margin-top: 50px;
+            }
+            #postBtnPerson{
+              width: 100%;
+              transform: translateX(-10px);
             }
         }
 </style>

@@ -5,9 +5,13 @@
                 <div class="col-xs col-md"></div>
                 <div class="col-xs-6 col-md-6">
                     <h1>This is Signup Page</h1>
+                    <div id="alertImg" class="alert">
+                      <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+                      <strong>Important!</strong>   <strong>Profile image is required!</strong>
+                    </div>
                           <form @submit.prevent="signup" >
                             <div class="form-group">
-                            <label for="exampleInputEmail1">Email address</label>
+                            <label id="exampleInputEmail2" for="exampleInputEmail2">Email address</label>
                             <input required v-model="email" type="text"  class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
                             </div>
 
@@ -53,8 +57,13 @@
                             </div>
 
                             <div v-if="this.korisnik=='shelter'" class="form-group">
-                              <label>Shelter's Name</label>
+                              <label id="shelterNameLabel">Shelter's Name</label>
                               <input required v-model="shelter_name_korisnika" type="text" class="form-control" placeholder="Shelter's Name">
+                            </div>
+
+                            <div class="form-group">
+                              <label id="usernameLabel">Username</label>
+                              <input required v-model="username_korisnika" type="text" class="form-control" placeholder="Username">
                             </div>
 
                             <div v-if="this.korisnik=='person'" class="form-group">
@@ -68,7 +77,7 @@
                               <div class="row">
                                 <div class="col-sm col-md">
                                   <label id="oibSsn">Organization's OIB / SSN</label>
-                                  <input required v-model=" oib_ssn_korisnika" type="text" class="form-control" placeholder="OIB / SSN">
+                                  <input maxlength="9" required v-model=" oib_ssn_korisnika" type="text" class="form-control" placeholder="OIB / SSN">
                                 </div>
                                 <div class="col-sm col-md">
                                   <label id="locationLabel">Location</label>
@@ -78,11 +87,11 @@
                             </div>
 
                             <div class="form-group">
-                            <label for="exampleInputPassword1">Password</label>
+                            <label id="exampleInputPassword3">Password</label>
                             <input required v-model="password" type="password"  class="form-control" id="exampleInputPassword1" placeholder="Password">
                             </div>
                              <div class="form-group">
-                            <label for="exampleInputPassword2">Confirm Password</label>
+                            <label id="confPass" for="exampleInputPassword2">Confirm Password</label>
                             <input required v-model="passwordConfirmation" type="password"  class="form-control" id="exampleInputPassword2" placeholder="Password">
                             <p v-if="!passwordCheck" id="password-error"><strong>Passwords Do Not Match!</strong></p>
                             </div>
@@ -111,6 +120,7 @@ export default {
       first_name_korisnika:'',
       second_name_korisnika:'',
       shelter_name_korisnika:'',
+      username_korisnika:'',
       gender_korisnika:'',
       genders_korisnika:['Male','Female'],
       oib_ssn_korisnika:'',
@@ -163,11 +173,8 @@ export default {
       break;
   }
 }, function() {
-  // Upload completed successfully, now we can get the download URL
     uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL_2) {
           let id = self.email;
-          // sada moramo spremiti te dodatne podatke
-          // Add a new document in collection "cities"
           db.collection("Users")
             .doc(id)
             .set({
@@ -175,6 +182,7 @@ export default {
               User_dbf: self.dbf_korisnika,
               User_First_Name: self.first_name_korisnika,
               User_Second_Name: self.second_name_korisnika,
+              User_Name:self.username_korisnika,
               User_Shelter_Name: self.shelter_name_korisnika,
               User_Gender: self.gender_korisnika,
               User_Shelter_OIB_SSN: self.oib_ssn_korisnika,
@@ -194,16 +202,13 @@ export default {
         }
 
       });
-          // postavi podatke o korisniku
-          // ovdje ide kod nakon POVRATKA UPITA za ragistraciju i to ako nije prošlo
-       
+     
         })
         .catch(error => {
-          // ovdje ide kod nakon POVRATKA UPITA za ragistraciju i to ako nije prošlo
           console.error(error);
           this.errorMessage = error.message;
         });
-      // ovdje se izvršava kod koji ide NAKON SLANJA UPITA za registraciju
+
     }
     else{
       this.passwordCheck=false;
@@ -217,6 +222,26 @@ export default {
 </script>
 
 <style lang="scss">
+#alertImg {
+  padding: 20px;
+  background-color: #f44336;
+  color: white;
+}
+
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
 #password-error{
   color: red;
 }
@@ -258,7 +283,21 @@ export default {
 .croppa-container{
     transform: translateX(-185px);
   }
-
+  #usernameLabel{
+    transform: translateX(-220px);
+  }
+  #exampleInputPassword3{
+    transform: translateX(-225px);
+    }
+    #confPass{
+    transform: translateX(-195px);
+   }
+   #shelterNameLabel{
+     transform: translateX(-205px);
+   }
+   #exampleInputEmail2{
+     transform: translateX(-210px);
+   }
  @media only screen and (max-width: 620px) {
             #leftcol{
                 display: none;
@@ -287,6 +326,41 @@ export default {
             #dob-shelter{
               transform: translateX(-70px);
             }
-            
+            #exampleInputEmail2{
+              transform: translateX(-75px);
+            }
+            #userTypeLabel{
+              transform: translateX(-75px);
+            }
+            #exampleInputPassword3{
+              transform: translateX(-85px);
+            }
+            #confPass{
+              transform: translateX(-60px);
+            }
+            #usernameLabel{
+              transform: translateX(-85px);
+            }
+            #dob-person{
+              transform: translateX(-80px);
+            }
+             #dob-shelter{
+              transform: translateX(-65px);
+            }
+            #shelterNameLabel{
+              transform: translateX(-70px);
+            }
+            #oibSsn{
+              transform: translateX(-35px);
+            }
+            #firstName{
+              transform: translateX(-85px);
+            }
+            #secondName{
+              transform: translateX(-75px);
+            }
+            #genderLabel{
+              transform: translateX(-100px);
+            }
         }
 </style>

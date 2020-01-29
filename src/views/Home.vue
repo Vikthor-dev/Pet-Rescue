@@ -43,6 +43,9 @@
             User Type : {{this.userType}}
           </div>
            <div class="line"></div>
+           <div>
+             <button @click="toMyPosts()" class="btn btn-info btn-md">My posts</button>
+           </div>
         </div>
       </div>
     </div>
@@ -62,7 +65,7 @@
       <div class="right-col">
 
           <nav class="navbar navbar-dark bg-dark default-color">
-          <img id="search-icon" src="/search-icon.png" alt="Search Icon">
+          <img id="search-icon" src="/Location.png" alt="Search Icon">
           <form class="form-inline my-2 my-lg-0 ml-auto">
           <input class="form-control" id="searchBar" v-model="search" type="search" placeholder="Search" aria-label="Search">
           </form>
@@ -163,7 +166,9 @@ import PostShelter from '@/components/PostShelter.vue';
     
     },
       methods: {
-
+      toMyPosts(){
+      this.$router.push({ name: "my-posts" }).catch(err => console.log(err));
+    }
       },
     /*  mounted(){
        db.collection("posts")
@@ -316,21 +321,6 @@ import PostShelter from '@/components/PostShelter.vue';
 .alert p{
   text-align: justify;
 }
-.carousel:hover{
-  transform:rotateX(30deg);
-}
-.carousel{
-  transition: transform 0.5s;
-}
-#carouselExampleIndicators{
-  margin-bottom: 20px;
-}
-#carouselExampleCaptions{
-  margin-bottom: 20px;
-}
-#carouselExample{
-  margin-bottom: 20px;
-}
 .right-col{
   .navbar{
     margin-bottom: 10px;
@@ -354,13 +344,6 @@ import PostShelter from '@/components/PostShelter.vue';
       transition: width 0.5s;
     }
   }
- /* #photoinput{
-    margin-top: 15px;
-  } */
- /* #setphoto{
-    transform: translateX(-32px);
-    margin-top:5px; 
-  } */
   #search-icon{
     height: 30px;
     width: 30px;
@@ -427,6 +410,9 @@ import PostShelter from '@/components/PostShelter.vue';
        border-color: rgb(60, 128, 192);
        border-width: 1px;
        margin-bottom: 10px;
+     }
+     .btn{
+       transform: translateX(10px)
      }
 }
 #profileAlertCard .form-group:hover{

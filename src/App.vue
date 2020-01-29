@@ -2,6 +2,11 @@
  <div id="app">
    <nav v-if="authenticated" class="navbar navbar-expand-lg navbar-dark bg-dark" id="nav">
   <a class="navbar-brand">PET RESCUE</a>
+   <li class="mobileSearch">
+      <form class="form-inline my-2 my-lg-0 ml-auto">
+      <input class="form-control" id="searchBarNav" v-model="search" type="search" placeholder="Search" aria-label="Search">
+      </form>
+      </li>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -52,7 +57,13 @@
          <button id="toTopBtn" @click="toTop" class="btn"><i class="fa fa-home"></i>Top</button>
       </li>
       <li id="userProfile" class="nav-item">
-        <router-link  to="user-profile" class="nav-link"><img id="nav-icon" src="/settings.png" alt="Dog Icon"></router-link>
+        <router-link  to="user-profile" class="nav-link"><img id="nav-icon" src="/settings.png" alt="User Profile Icon"></router-link>
+      </li>
+      <li id="statsIcon" class="nav-item">
+        <router-link  to="stats" class="nav-link"><img id="nav-icon" src="/graph.png" alt="Statistics Icon"></router-link>
+      </li>
+      <li id="statsIcon" class="nav-item">
+        <button id="toMypostsBtn" @click="toMyPosts()" class="btn btn-info btn-sm">My posts</button>
       </li>
    </nav>
 
@@ -69,10 +80,23 @@ export default {
   methods:{
     logout(){
       this.search='';
+      this.userType='',
+      this.userDbf='',
+      this.userFirstName='',
+      this.userSecondName='',
+      this.userShelterName='',
+      this.userGender='',
+      this.userOibSsn='',
+      this.userLocation='',
+      this.userPicture='',
+      this.userName='',
       firebase.auth().signOut();
     },
     toTop(){
        document.documentElement.scrollTop = 0;
+    },
+      toMyPosts(){
+      this.$router.push({ name: "my-posts" }).catch(err => console.log(err));
     }
   },
   mounted(){
@@ -87,6 +111,7 @@ export default {
       .get()
       .then(doc => {
       if (doc.exists) {
+      this.userName= doc.data().User_Name;
       this.userType = doc.data().User_Type;
       this.userDbf = doc.data().User_dbf;
       this.userFirstName = doc.data().User_First_Name;
@@ -102,7 +127,7 @@ export default {
           // doc.data() will be undefined in this case
           console.log("No such document!");
               }
-          });
+          }); 
 
         
         if (this.$route.name !== "home")
@@ -125,6 +150,7 @@ export default {
             if (data.postedBy) {
                 this.posts.unshift({
                 id: change.doc.id,
+                username:data.username,
                 postedBy: data.postedBy,
                 url: data.url,
                 description:data.description,
@@ -142,7 +168,36 @@ export default {
           }
         });
       });
+
+        var self=this
+        db.collection('posts').where("animal","==","Other").get().then(snap => {
+          self.size_other = snap.size // will return the collection size
+          console.log("Size :",self.size_other)
+        });
+
+        
+        db.collection('posts').where("animal","==","Dog").get().then(snap => {
+          self.size_dogs = snap.size // will return the collection size
+          console.log("Size :",self.size_dogs)
+        });
+
+        db.collection('posts').where("animal","==","Cat").get().then(snap => {
+          self.size_cats = snap.size // will return the collection size
+          console.log("Size :",self.size_cats)
+        });
+
+         db.collection('Users').where("User_Type","==","person").get().then(snap => {
+          self.size_person = snap.size // will return the collection size
+          console.log("Size :",self.size_person)
+        });
+
+          db.collection('Users').where("User_Type","==","shelter").get().then(snap => {
+          self.size_shelter = snap.size // will return the collection size
+          console.log("Size :",self.size_shelter)
+        });
   }
+
+  
 }
 </script>
 
@@ -165,8 +220,11 @@ html, body, #app, section.section {
 }
 </style>
 
-</style>
 <style scoped lang="scss">
+
+.mobileSearch{
+  display: none;
+}
 
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -292,13 +350,22 @@ html, body, #app, section.section {
     font-weight: bold;
   }
   #userProfile{
-    margin-left: 30px;
+    margin-left: 50px;
+    transform: translateY(-10px);
+  }
+   #statsIcon{
     transform: translateY(-10px);
   }
    img:hover{
     width: 25px;
     height: 25px;
   }
+}
+#searchBarNav{
+  width: 250px;
+}
+#toMypostsBtn{
+  display: none;
 }
  @media only screen and (max-width: 620px) {
    #petRescueSignbottom{
@@ -313,6 +380,22 @@ html, body, #app, section.section {
      .nav-link{
        transform: translateY(-10px);
      }
+     li{
+      transform: translateX(-20px);
+    }
+    #statsIcon{
+      transform: translate(125px,-80px);
+    }
+    #userProfile{
+    transform: translate(-120px,-10px);
+  }
    }
+   .mobileSearch{
+     display: inline;
+  }
+  #toMypostsBtn{
+    display: inline;
+    transform: translateX(-120px);
+  }
  }
 </style>

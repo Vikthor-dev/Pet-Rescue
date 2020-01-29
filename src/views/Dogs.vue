@@ -28,7 +28,7 @@ import PostShelter from '@/components/PostShelter.vue';
       return this.posts.filter(post => post.postedBy.toLowerCase().includes(this.search) || post.description.toLowerCase().includes(this.search))
     },
       filteredPostShelter () {
-      return this.posts.filter(post => post.postedBy.toLowerCase().includes(this.search) && post.animal=='Dog' || post.description.toLowerCase().includes(this.search) && post.animal=='Dog')
+      return this.posts.filter(post => post.username.toLowerCase().includes(this.search) && post.animal=='Dog' || post.description.toLowerCase().includes(this.search) && post.animal=='Dog' || post.location.toLowerCase().includes(this.search) && post.animal=='Dog')
     },
         convertTimestamp() {
         var d = new Date(this.userDbf.seconds * 1000), // Convert the passed timestamp to milliseconds
@@ -57,7 +57,6 @@ import PostShelter from '@/components/PostShelter.vue';
 }
       },
        mounted(){
-      
    /*    db.collection("posts")
       .orderBy("time")
       .limit(30)

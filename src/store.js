@@ -13,6 +13,7 @@ export default{
     userOibSsn:'',
     userLocation:'',
     userPicture:'',
+    userName:'',
 
     postImageData:null,
     postImageUrl:'',
@@ -26,5 +27,13 @@ export default{
     ages:['Puppy','Adult','Senior'],
     location:'',
     link:'',
-    time:''
+    time:'',
+
+    size_other:0,
+    size_cats:0,
+    size_dogs:0,
+    size_person:0,
+    size_shelter:0,
+
+    isDisabled:false
 }

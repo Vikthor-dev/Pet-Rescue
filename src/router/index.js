@@ -33,6 +33,11 @@ const routes = [
         component: () => import(/* webpackChunkName: "about" */ '../views/Other.vue')
       },
       {
+        path: '/my-posts',
+        name: 'my-posts',
+        component: () => import(/* webpackChunkName: "about" */ '../views/MyPosts.vue')
+      },
+      {
         path: 'post/:id',
         props: true,
         name: 'post-detail',
@@ -85,6 +90,11 @@ const routes = [
     path: '/edit-profile',
     name: 'edit-profile',
     component: () => import(/* webpackChunkName: "about" */ '../views/EditUserProfile.vue')
+  },
+  {
+    path: '/stats',
+    name: 'stats',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Stats.vue')
   }
 ]
 

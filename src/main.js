@@ -4,6 +4,10 @@ import router from './router'
 import 'vue-croppa/dist/vue-croppa.css'
 import Croppa from 'vue-croppa'
 
+import VueApexCharts from 'vue-apexcharts'
+
+Vue.component('apexchart', VueApexCharts)
+
 Vue.config.productionTip = false
 
 Vue.use(Croppa);

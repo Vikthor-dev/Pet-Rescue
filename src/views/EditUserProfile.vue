@@ -33,6 +33,17 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-xs col-md">
+                         <input disabled type="text" class="form-control" :value="this.global.userName">
+                    </div>
+                    <div class="col-xs col-md">
+                         <input type="text" class="form-control" v-model="novo_user_ime" placeholder="Update Username">
+                    </div>
+                </div>
+            </div>
+
              <div v-if="this.global.userType=='shelter'" class="form-group">
                 <div class="row">
                     <div class="col-xs col-md">
@@ -40,17 +51,6 @@
                     </div>
                     <div class="col-xs col-md">
                          <input type="text" class="form-control" v-model="novo_ime_sklonista" placeholder="Update Shelter Name">
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                  <div class="row">
-                    <div class="col-xs col-md">
-                         <input type="text" class="form-control" style="width:150px" disabled :value="convertTimestamp">
-                    </div>
-                    <div class="col-xs col-md">
-                         <datepicker :clear-button="true" v-model="novi_datum" placeholder="Update Date"></datepicker>
                     </div>
                 </div>
             </div>
@@ -106,8 +106,9 @@
             </div>
             
 
-            <button id="updateBtn" type="submit" class="btn btn-primary btn-lg">Update</button>
+            <button id="updateBtn" type="submit" class="btn btn-primary btn-lg">Update Image</button>
         </form>
+            <button id="updateBtn3" @click="updateRest()" class="btn btn-primary btn-lg">Update Profile Info.</button>
     </div>
 
 
@@ -133,6 +134,7 @@ export default {
             spolovi:['Male','Female'],
             novo_prvo_ime:'',
             novo_drugo_ime:'',
+            novo_user_ime:'',
             novo_ime_sklonista:'',
             novi_datum:'',
             novi_oib_ssn:'',
@@ -182,13 +184,14 @@ export default {
   // Upload completed successfully, now we can get the download URL
   uploadTask_3.snapshot.ref.getDownloadURL().then(function(downloadURL_3) {
       db.collection("Users").doc(self.global.userEmail).update({
-                    User_dbf : self.novi_datum,
-                    User_First_Name : self.novo_prvo_ime,
-                    User_Second_Name : self.novo_drugo_ime,
-                    User_Shelter_Name : self.novo_ime_sklonista,
-                    User_Gender : self.spol,
-                    User_Shelter_OIB_SSN : self.novi_oib_ssn,
-                    User_Shelter_Location : self.nova_lokacija,
+                    User_dbf : self.global.userDbf,
+                    User_First_Name : self.global.userFirstName,
+                    User_Second_Name : self.global.userSecondName,
+                    User_Shelter_Name : self.global.userShelterName,
+                    User_Name:self.global.userName,
+                    User_Gender : self.global.userGender,
+                    User_Shelter_OIB_SSN : self.global.userOibSsn,
+                    User_Shelter_Location : self.global.userLocation,
                     User_Picture : downloadURL_3
             })
             .then(function() {
@@ -206,6 +209,67 @@ export default {
 
       });
        this.$router.push({ name: "posts" }).catch(err => console.log(err));
+        },
+        updateRest(){
+            if(this.novo_prvo_ime==''){
+                this.novo_prvo_ime=this.global.userFirstName;
+                     if(this.novo_drugo_ime==''){
+                this.novo_drugo_ime=this.global.userSecondName;
+            }
+             if(this.novo_ime_sklonista==''){
+                this.novo_ime_sklonista=this.global.userShelterName;
+            }
+             if(this.novo_user_ime==''){
+                this.novo_user_ime=this.global.userName;
+            }
+             if(this.spol==''){
+                this.spol=this.global.userGender;
+            }
+             if(this.novi_oib_ssn==''){
+                this.novi_oib_ssn=this.global.userOibSsn;
+            }
+             if(this.nova_lokacija==''){
+                this.nova_lokacija=this.global.userLocation;
+            }
+            }
+            else if(!this.novo_prvo_ime==''){
+                     if(this.novo_drugo_ime==''){
+                this.novo_drugo_ime=this.global.userSecondName;
+            }
+             if(this.novo_ime_sklonista==''){
+                this.novo_ime_sklonista=this.global.userShelterName;
+            }
+             if(this.novo_user_ime==''){
+                this.novo_user_ime=this.global.userName;
+            }
+             if(this.spol==''){
+                this.spol=this.global.userGender;
+            }
+             if(this.novi_oib_ssn==''){
+                this.novi_oib_ssn=this.global.userOibSsn;
+            }
+             if(this.nova_lokacija==''){
+                this.nova_lokacija=this.global.userLocation;
+            }
+            }
+                  db.collection("Users").doc(this.global.userEmail).update({
+                    User_dbf : this.global.userDbf,
+                    User_First_Name : this.novo_prvo_ime,
+                    User_Second_Name : this.novo_drugo_ime,
+                    User_Shelter_Name : this.novo_ime_sklonista,
+                    User_Name:this.novo_user_ime,
+                    User_Gender : this.spol,
+                    User_Shelter_OIB_SSN : this.novi_oib_ssn,
+                    User_Shelter_Location : this.nova_lokacija,
+                    User_Picture : this.global.userPicture
+            })
+            .then(function() {
+                console.log("Document successfully written!");
+            })
+            .catch(function(error) {
+                console.error("Error writing document: ", error);
+            });
+            this.$router.push({ name: "posts" }).catch(err => console.log(err));
         }
     },
     computed:{
@@ -251,8 +315,11 @@ h1{
     margin-top: 30px;
 }
 #updateBtn{
-    transform: translateY(-140px);
+    transform: translateY(-130px);
     margin-right: 540px;
+}
+#updateBtn3{
+    transform: translate(0px,-180px);
 }
 .form-group{
     img{
@@ -265,5 +332,19 @@ h1{
 .croppa-container{
     margin-left: 180px;
     transform: translateY(-140px);
+}
+@media only screen and (max-width: 620px) {
+  .left-col{
+    display: none;
+  }
+  .right-col{
+    display:none;
+  }
+  input{
+      margin:2px;
+  }
+  #updateBtn3{
+    transform: translate(70px,-180px);
+}
 }
 </style>

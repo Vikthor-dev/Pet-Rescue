@@ -1,13 +1,12 @@
 <template>
   <div v-if="authenticated">
-    <div  :key="post.id" v-for="post in filteredPostShelter">
+    <div :key="post.id" v-for="post in filteredPostShelter">
       <PostShelter :info="post"/>
     </div>
   </div>
 </template>
 
 
-<!--import store from '@/store.js';-->
 <script>
 import store from '@/store.js';
 import Post from '@/components/Post.vue'; 
@@ -17,7 +16,7 @@ import PostShelter from '@/components/PostShelter.vue';
    data(){
      return store;
    },
-    name: 'cats', 
+    name: 'other', 
     components: {
       Post,
       PostShelter
@@ -27,9 +26,9 @@ import PostShelter from '@/components/PostShelter.vue';
       return this.posts.filter(post => post.postedBy.toLowerCase().includes(this.search) || post.description.toLowerCase().includes(this.search))
     },
       filteredPostShelter () {
-      return this.posts.filter(post => post.username.toLowerCase().includes(this.search) && post.animal=='Cat' || post.description.toLowerCase().includes(this.search) && post.animal=='Cat' || post.location.toLowerCase().includes(this.search) && post.animal=='Cat')
+      return this.posts.filter(post => post.username.toLowerCase().includes(this.search) && post.postedBy==this.userEmail || post.description.toLowerCase().includes(this.search) && post.postedBy==this.userEmail || post.location.toLowerCase().includes(this.search) && post.postedBy==this.userEmail)
     },
-        convertTimestamp() {
+      convertTimestamp() {
         var d = new Date(this.userDbf.seconds * 1000), // Convert the passed timestamp to milliseconds
         yyyy = d.getFullYear(),
         mm = ('0' + (d.getMonth() + 1)).slice(-2),  // Months are zero based. Add leading 0.
@@ -55,15 +54,15 @@ import PostShelter from '@/components/PostShelter.vue';
     return time;
 }
       },
-       mounted(){
-   /*    db.collection("posts")
+      mounted(){
+  /*     db.collection("posts")
       .orderBy("time")
       .limit(30)
       .onSnapshot(snapshot => {
         snapshot.docChanges().forEach(change => {
           if (change.type === "added") {
             const data = change.doc.data();
-            if (data.postedBy && data.animal=="Cat") {
+            if (data.postedBy && data.animal=="Other") {
               this.posts.unshift({
                 id: change.doc.id,
                 postedBy: data.postedBy,
@@ -79,15 +78,23 @@ import PostShelter from '@/components/PostShelter.vue';
         });
       }); */
       },
-      methods:{
-         gotoDetails(post) {
-        this.$router.push({path: `post/${post.id}`})
-    }
-      }
+       methods:{
+        gotoDetails(post) {
+         this.$router.push({path: `post/${post.id}`})
+           }
+        }
+      
     }
 </script>
 
 <style lang="scss">
+ #saveAnimals{
+   width: 500px;
+   transition: transform 0.5s;
+ }
+ #saveAnimals:hover{
+   transform: rotateY(30deg);
+ }
 .header{
   height: 60px;
   border-style: solid;
@@ -206,6 +213,14 @@ import PostShelter from '@/components/PostShelter.vue';
 .alert p{
   text-align: justify;
 }
+.carousel:hover{
+  animation-name:move;
+  animation-duration:4s;
+}
+@keyframes move{
+  from{transform: translateX(-20px);}
+  to{transform: translateX(0px);}
+}
 #carouselExampleIndicators{
   margin-bottom: 20px;
 }
@@ -248,7 +263,7 @@ import PostShelter from '@/components/PostShelter.vue';
     border-color: dodgerblue;
     border-width: 2px;
   }
-  #person-icon{
+    #person-icon{
    height: 30px;
    width: 30px;
    transform: translateX(-5px);
@@ -318,5 +333,3 @@ import PostShelter from '@/components/PostShelter.vue';
   }
 }
 </style>
-
-

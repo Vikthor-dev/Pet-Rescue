@@ -54,7 +54,7 @@
             <div v-if="this.global.userType=='shelter'" class="form-group">
             <div class="row">
             <div class="col-xs col-md">
-               <input disabled v-model="at_age" type="text" id="petname" class="form-control" placeholder="Animal's name"/>
+               <input disabled v-model="at_age" type="text" id="petname" class="form-control" placeholder="Animal's age"/>
             </div>
             <div class="col-xs col-md">
                 <select id="animalType" class="form-control" v-model="newAge">
@@ -67,7 +67,7 @@
            <div v-if="this.global.userType=='shelter'" class="form-group">
             <div class="row">
             <div class="col-xs col-md">
-               <input disabled v-model="at_gender" type="text" id="petname" class="form-control" placeholder="Animal's name"/>
+               <input disabled v-model="at_gender" type="text" id="petname" class="form-control" placeholder="Animal's gender"/>
             </div>
             <div class="col-xs col-md">
                 <select id="animalType" class="form-control" v-model="newGender">
@@ -84,7 +84,7 @@
                <input disabled v-model="at_location" type="text" id="LocationInput" class="form-control" placeholder="City,Country"/>
             </div>
             <div class="col-xs col-md">
-               <input v-model="newLocation" maxlength="14" type="text" id="LocationInput" class="form-control" placeholder="City,Country"/>
+               <input v-model="newLocation" type="text" id="LocationInput" class="form-control" placeholder="City,Country"/>
             </div>
             </div>
           </div>
@@ -102,6 +102,28 @@
 
           <button type="submit" id="postBtn" class="btn btn-primary btn-lg mb-5"><strong>Save</strong></button>
         </form>
+        <button type="submit" id="deletePostBtn" data-toggle="modal" data-target="#exampleModalLong" class="btn btn-danger btn-lg mb-5">Delete Post</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Delete post</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete your post?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <button  type="button" @click="deletePost()" data-dismiss="modal" class="btn btn-danger">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
 
     </div>
 
@@ -164,6 +186,47 @@ export default {
   },
   methods: {
     updatePost() {
+      if (this.newDescription=='') {
+        this.newDescription=this.at_description;
+        if (this.newAnimal===''){
+        this.newAnimal=this.at_animal;
+      }
+        if(this.newGender===''){
+        this.newGender=this.at_gender;
+      }
+        if(this.newName==''){
+        this.newName=this.at_name;
+      }
+        if(this.newLink==''){
+        this.newLink=this.at_link;
+      }
+        if(this.newAge===''){
+        this.newAge=this.at_age;
+      }
+        if(this.newLocation==''){
+       this.newLocation=this.at_location;
+      }
+      }
+      else if(!this.newDescription==''){
+        if (this.newAnimal===''){
+        this.newAnimal=this.at_animal;
+      }
+        if(this.newGender===''){
+        this.newGender=this.at_gender;
+      }
+        if(this.newName==''){
+        this.newName=this.at_name;
+      }
+        if(this.newLink==''){
+        this.newLink=this.at_link;
+      }
+        if(this.newAge===''){
+        this.newAge=this.at_age;
+      }
+        if(this.newLocation==''){
+       this.newLocation=this.at_location;
+      }
+      }
       var id = this.id;
       db.collection("posts")
         .doc(id)
@@ -183,6 +246,15 @@ export default {
         .catch(e => {
           console.error(e);
         });
+    },
+    deletePost(){
+      let id=this.id;
+      db.collection("posts").doc(id).delete().then(function() {
+    console.log("Document successfully deleted!");
+      }).catch(function(error) {
+          console.error("Error removing document: ", error);
+      });
+      this.$router.push({ name: "posts" });
     }
   }
 };
@@ -207,6 +279,10 @@ export default {
     margin-top: 30px;
     transform: translateX(-330px);
   }
+  #deletePostBtn{
+    transform: translateY(-95px);
+    margin-right: 300px;
+  }
   #animalType{
     transform: translateX(-15px);
     width:100px;
@@ -214,6 +290,7 @@ export default {
   #editPosth1{
       margin-bottom: 30px;
       color: whitesmoke;
+      font-style: italic;
       transform: translateX(-20px);
   }
    @media only screen and (max-width: 620px) {
@@ -251,6 +328,23 @@ export default {
               #editPosth1{
              margin-bottom: 30px;
              color: whitesmoke;
-  }
+             font-style: italic;
+           }
+           input{
+             margin:2px;
+           }
+           select{
+             margin:2px;
+           }
+           textarea{
+             margin:2px;
+           }
+           #deletePostBtn{
+             width: 100%;
+             transform: translateX(-10px);
+           }
+           .modal{
+             width: 400px;
+           }
         }
 </style>
